@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Club Membership Application</title>
+    <style>
+        /* ... (same CSS as before) ... */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            pointer-events: none;
+            transition: 0.3s ease all;
+            color: #999;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            outline: none;
+        }
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus{
+            border-color: #007bff;
+        }
+
+        .form-group input:focus + label,
+        .form-group input:not(:placeholder-shown) + label,
+        .form-group textarea:focus + label,
+        .form-group textarea:not(:placeholder-shown) + label,
+        .form-group select:focus + label,
+        .form-group select:not(:placeholder-shown) + label {
+            top: -10px;
+            left: 0;
+            font-size: 12px;
+            color: #007bff;
+            background-color: white;
+            padding: 0 5px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Club Membership Application</h2>
+        <form id="membershipForm">
+            <div class="form-group">
+                <input type="text" id="firstName" name="firstName" placeholder=" " required>
+                <label for="firstName">First Name</label>
+                <div class="error-message" id="firstNameError"></div>
+            </div>
+            <button type="submit">Submit Application</button>
+        </form>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#membershipForm').submit(function(event) {
+                event.preventDefault();
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/submit_application/',
+                    data: $(this).serialize(),
+                    success: function(response) {
+                        window.location.href = '/success/';
+                    },
+                    error: function(response) {
+                        $('.error-message').text(''); // Clear previous errors
+                        if (response.responseJSON && response.responseJSON.errors) {
+                            const errors = response.responseJSON.errors;
+                            for (const field in errors) {
+                                $(`#${field}Error`).text(errors[field]);
+                            }
+                        } else {
+                            alert('Error submitting form.');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
