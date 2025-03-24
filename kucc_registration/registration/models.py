@@ -1,20 +1,27 @@
-from django.db import models
-
-# Create your models here.
+# myapp/models.py
 from django.db import models
 
 class Student(models.Model):
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    email = models.EmailField()
-    student_id = models.CharField(max_length=20)
-    reg_no = models.CharField(max_length=20)
-    department = models.CharField(max_length=100)
-    location = models.CharField(max_length=100)
-    batch_year = models.IntegerField()
-    country_code = models.CharField(max_length=5)
-    phone_number = models.CharField(max_length=20)
-    interests = models.TextField()
+    full_name = models.CharField(max_length=100)
+    student_id = models.CharField(max_length=20, unique=True)
+    email = models.EmailField(unique=True)
+    phone = models.CharField(max_length=15)  # Combining country_code and phone_number
+    gender = models.CharField(max_length=20, choices=[
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+        ('Other', 'Other'),
+        ('PreferNotToSay', 'Prefer not to say')
+    ])
+    faculty = models.CharField(max_length=50)
+    batch_year = models.CharField(max_length=4)  # e.g., "2023"
+    major = models.CharField(max_length=100)
+    skills = models.CharField(max_length=100)
+    why_join = models.TextField()
+    province = models.CharField(max_length=50)
+    district = models.CharField(max_length=50)
+    municipality = models.CharField(max_length=100)
+    consent = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return self.full_name

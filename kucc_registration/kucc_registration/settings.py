@@ -55,7 +55,7 @@ ROOT_URLCONF = 'kucc_registration.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ["templates"],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,9 +77,9 @@ WSGI_APPLICATION = 'kucc_registration.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'your_database_name',
-        'USER': 'your_database_user',
-        'PASSWORD': 'your_database_password',
+        'NAME': 'first_database',
+        'USER': 'postgres',
+        'PASSWORD': 'helloworld',
         'HOST': 'localhost', # Use '127.0.0.1' or your PostgreSQL server IP
         'PORT': '5432', # Default PostgreSQL port
     }

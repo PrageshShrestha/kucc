@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Club Membership Application</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 600px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            pointer-events: none;
+            transition: 0.3s ease all;
+            color: #999;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: #007bff;
+        }
+
+        .form-group input:focus + label,
+        .form-group input:not(:placeholder-shown) + label,
+        .form-group textarea:focus + label,
+        .form-group textarea:not(:placeholder-shown) + label,
+        .form-group select:focus + label,
+        .form-group select:not(:placeholder-shown) + label {
+            top: -10px;
+            left: 0;
+            font-size: 12px;
+            color: #007bff;
+            background-color: white;
+            padding: 0 5px;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            width: 48%;
+        }
+
+        button[type="reset"] {
+            background-color: #f44336;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        button[type="reset"]:hover {
+            background-color: #e53935;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 0.8em;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            button {
+                width: 48%;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>Club Membership Application</h2>
+        <form id="membershipForm">
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+            <!-- Personal Information -->
+            <div class="form-group">
+                <input type="text" id="full_name" name="full_name" placeholder=" " required>
+                <label for="full_name">Full Name</label>
+                <div class="error-message" id="full_nameError"></div>
+            </div>
+            <div class="form-group">
+                <input type="text" id="student_id" name="student_id" placeholder=" " required>
+                <label for="student_id">Student ID</label>
+                <div class="error-message" id="student_idError"></div>
+            </div>
+            <div class="form-group">
+                <input type="email" id="email" name="email" placeholder=" " required>
+                <label for="email">Email Address</label>
+                <div class="error-message" id="emailError"></div>
+            </div>
+            <div class="form-group">
+                <input type="tel" id="phone" name="phone" placeholder=" " required>
+                <label for="phone">Phone Number</label>
+                <div class="error-message" id="phoneError"></div>
+            </div>
+            <div class="form-group">
+                <select id="gender" name="gender" required>
+                    <option value="" selected disabled></option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                    <option value="PreferNotToSay">Prefer not to say</option>
+                </select>
+                <label for="gender">Gender</label>
+                <div class="error-message" id="genderError"></div>
+            </div>
+
+            <!-- Academic Information -->
+            <div class="form-group">
+                <select id="faculty" name="faculty" required>
+                    <option value="" selected disabled></option>
+                    <option value="Science">Science</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="Arts">Arts</option>
+                </select>
+                <label for="faculty">Faculty/Department</label>
+                <div class="error-message" id="facultyError"></div>
+            </div>
+            <div class="form-group">
+                <select id="batch_year" name="batch_year" required>
+                    <option value="" selected disabled></option>
+                </select>
+                <label for="batch_year">Batch Year</label>
+                <div class="error-message" id="batch_yearError"></div>
+            </div>
+            <div class="form-group">
+                <input type="text" id="major" name="major" placeholder=" " required>
+                <label for="major">Major/Program of Study</label>
+                <div class="error-message" id="majorError"></div>
+            </div>
+
+            <!-- Skills and Interests -->
+            <div class="form-group">
+                <select id="skills" name="skills" required>
+                    <option value="" selected disabled></option>
+                    <option value="Programming">Programming</option>
+                    <option value="Web Development">Web Development</option>
+                    <option value="Networking">Networking</option>
+                    <option value="Cybersecurity">Cybersecurity</option>
+                    <option value="Graphic Design">Graphic Design</option>
+                </select>
+                <label for="skills">Skills Known</label>
+                <div class="error-message" id="skillsError"></div>
+            </div>
+            <div class="form-group">
+                <textarea id="why_join" name="why_join" placeholder=" " required></textarea>
+                <label for="why_join">Why do you want to join the Computer Club?</label>
+                <div class="error-message" id="why_joinError"></div>
+            </div>
+
+            <!-- Address Section -->
+            <div class="form-group">
+                <select id="province" name="province" onchange="updateDistricts()" required>
+                    <option value="" selected disabled></option>
+                </select>
+                <label for="province">Province</label>
+                <div class="error-message" id="provinceError"></div>
+            </div>
+            <div class="form-group">
+                <select id="district" name="district" onchange="updateMunicipalities()" required disabled>
+                    <option value="" selected disabled>Select District</option>
+                </select>
+                <label for="district">District</label>
+                <div class="error-message" id="districtError"></div>
+            </div>
+            <div class="form-group">
+                <select id="municipality" name="municipality" required disabled>
+                    <option value="" selected disabled>Select Municipality</option>
+                </select>
+                <label for="municipality">Municipality</label>
+                <div class="error-message" id="municipalityError"></div>
+            </div>
+
+            <!-- Consent -->
+            <div class="form-group">
+                <input type="checkbox" id="consent" name="consent" required>
+                <label for="consent" style="position: static; color: #333;">I agree to the club’s code of conduct and participation requirements.</label>
+                <div class="error-message" id="consentError"></div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="button-container">
+                <button type="submit">Submit Application</button>
+                <button type="reset" onclick="resetForm()">Reset</button>
+            </div>
+        </form>
+    </div>
+   
+    <div id="full_nameError" class="error-message"></div>
+    <!-- Add other error divs as needed -->
+
+    <!-- Define formData -->
+    
+
+    <script>
+        // Update Districts
+        function updateDistricts(formData) {
+            const province = $('#province').val();
+            const districtDropdown = $('#district');
+            const municipalityDropdown = $('#municipality');
+
+            districtDropdown.prop('disabled', true).html('<option value="" selected disabled>Select District</option>');
+            municipalityDropdown.prop('disabled', true).html('<option value="" selected disabled>Select Municipality</option>');
+
+            if (province) {
+                $.ajax({
+                    url: '/submit_application/',
+                    type: 'GET',
+                    data: { province: province },
+                    success: function(data) {
+                        console.log('Districts Data:', data);
+                        districtDropdown.prop('disabled', false);
+                        Object.keys(data[province]).forEach(district => {
+                            districtDropdown.append(`<option value="${district}">${district}</option>`);
+                        });
+                        if (formData && formData.district) {
+                            districtDropdown.val(formData.district);
+                            console.log('District Set:', formData.district);
+                            updateMunicipalities(formData);
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error('District Load Error:', xhr.status, xhr.statusText);
+                        alert('Error loading districts.');
+                    }
+                });
+            }
+        }
+
+        // Update Municipalities
+        function updateMunicipalities(formData) {
+            const province = $('#province').val();
+            const district = $('#district').val();
+            const municipalityDropdown = $('#municipality');
+
+            municipalityDropdown.prop('disabled', true).html('<option value="" selected disabled>Select Municipality</option>');
+
+            if (district) {
+                $.ajax({
+                    url: '/submit_application/',
+                    type: 'GET',
+                    data: { province: province, district: district },
+                    success: function(data) {
+                        console.log('Municipalities Data:', data);
+                        municipalityDropdown.prop('disabled', false);
+                        data[province][district].forEach(municipality => {
+                            municipalityDropdown.append(`<option value="${municipality}">${municipality}</option>`);
+                        });
+                        if (formData && formData.municipality) {
+                            municipalityDropdown.val(formData.municipality);
+                            console.log('Municipality Set:', formData.municipality);
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error('Municipality Load Error:', xhr.status, xhr.statusText);
+                        alert('Error loading municipalities.');
+                    }
+                });
+            }
+        }
+
+        // Reset Form
+        function resetForm() {
+            $('#membershipForm')[0].reset();
+            $('#district').prop('disabled', true).html('<option value="" selected disabled>Select District</option>');
+            $('#municipality').prop('disabled', true).html('<option value="" selected disabled>Select Municipality</option>');
+            $('.error-message').text('');
+        }
+
+        $(document).ready(function() {
+            const formDataElement = document.getElementById('form-data');
+            const formData = formDataElement ? JSON.parse(formDataElement.textContent) : null;
+            console.log('Form Data Loaded:', formData);
+
+            // Populate Batch Years
+            const currentYear = new Date().getFullYear();
+            const batchYearDropdown = $('#batch_year');
+            batchYearDropdown.empty().append('<option value="" selected disabled>Select Batch Year</option>');
+            for (let year = 2021; year <= currentYear; year++) {
+                batchYearDropdown.append(`<option value="${year}">Batch ${year}</option>`);
+            }
+            if (formData && formData.batch_year) {
+                batchYearDropdown.val(formData.batch_year);
+                console.log('Batch Year Set:', formData.batch_year);
+            }
+
+            // Fetch Provinces
+            const provinceDropdown = $('#province');
+            provinceDropdown.empty().append('<option value="" selected disabled>Select Province</option>');
+            $.ajax({
+                url: '/submit_application/',
+                type: 'GET',
+                success: function(data) {
+                    console.log('Provinces Data:', data);
+                    Object.keys(data).forEach(province => {
+                        provinceDropdown.append(`<option value="${province}">${province}</option>`);
+                    });
+                    if (formData && formData.province) {
+                        provinceDropdown.val(formData.province);
+                        console.log('Province Set:', formData.province);
+                        updateDistricts(formData);
+                    }
+                },
+                error: function(xhr) {
+                    console.error('Province Load Error:', xhr.status, xhr.statusText);
+                    alert('Error loading provinces.');
+                }
+            });
+
+            // Form Submission
+            $('#membershipForm').submit(function(event) {
+                event.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: '/submit_application/',
+                    data: $(this).serialize(),
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('X-CSRFToken', $('input[name=csrfmiddlewaretoken]').val());
+                    },
+                    success: function(response) {
+                        console.log('Form Submission Success:', response);
+                        window.location.href = response.redirect;
+                    },
+                    error: function(xhr) {
+                        $('.error-message').text('');
+                        if (xhr.responseJSON && xhr.responseJSON.errors) {
+                            const errors = xhr.responseJSON.errors;
+                            for (const field in errors) {
+                                $(`#${field}Error`).text(errors[field]);
+                            }
+                        } else {
+                            console.error('Form Submission Error:', xhr.status, xhr.statusText);
+                            alert('Error submitting form: ' + (xhr.statusText || 'Unknown error'));
+                        }
+                    }
+                });
+            });
+
+            // Repopulate other fields
+            if (formData) {
+                for (const [key, value] of Object.entries(formData)) {
+                    if (key === 'consent') {
+                        $('#consent').prop('checked', value === 'on');
+                    } else if (key !== 'province' && key !== 'district' && key !== 'municipality' && key !== 'batch_year') {
+                        $(`#${key}`).val(value);
+                    }
+                }
+                if (formData.province && (formData.district || formData.municipality)) {
+                    $(document).ajaxStop(function() {
+                        if (formData.district) {
+                            $('#district').val(formData.district);
+                            console.log('District Set:', formData.district);
+                            updateMunicipalities(formData);
+                        }
+                        if (formData.municipality) {
+                            $('#municipality').val(formData.municipality);
+                            console.log('Municipality Set:', formData.municipality);
+                        }
+                        $(document).off('ajaxStop');
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
